@@ -65,12 +65,12 @@ namespace NewAccountRegistration.Repository
                 var response = await client.PutAsync(uri, requestContent);               
 
                 response.EnsureSuccessStatusCode();
-                
-                var content = await response.Content.ReadAsStringAsync();
+
+                var content = string.Empty;
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    
+                    content = await response.Content.ReadAsStringAsync();
                 }
 
                 return content;
