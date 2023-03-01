@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NewAccountRegistration.DataTransferModel;
 using NewAccountRegistration.Interface;
+using NewAccountRegistration.Models;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,11 +32,21 @@ namespace NewAccountRegistration.Controllers
             return Ok(userDetails);
         }
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
+        // GET api/<UserController>/196900049H
+        [HttpGet("[action]/{SingpassID}")]
+        [ActionName("GetJarvis")]
+        public async Task<ActionResult<string>> GetBusinessDetails_Jarvis(string SingpassID)
+        {           
+            if (SingpassID == null)
+            {
+                return BadRequest();
+            }
+            var jarvisUser = await _userService.GetJarvisUser(SingpassID);
+            if (jarvisUser == null)
+            {
+                return NotFound();
+            }
+            return Ok (jarvisUser);
         }
 
         // POST api/<UserController>
@@ -41,9 +56,19 @@ namespace NewAccountRegistration.Controllers
         }
 
         // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<ActionResult<string>> Put( [FromBody] GetJarvisInfo jarvisInfo)
         {
+            if (jarvisInfo == null)
+            {
+                return BadRequest();
+            }
+            var jarvisUser = await _userService.UpdateJarvisUser(jarvisInfo);
+            if (jarvisUser == null)
+            {
+                return NotFound();
+            }
+            return Ok(jarvisUser);
         }
 
         // DELETE api/<UserController>/5
@@ -53,3 +78,4 @@ namespace NewAccountRegistration.Controllers
         }
     }
 }
+    
