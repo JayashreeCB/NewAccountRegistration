@@ -55,8 +55,9 @@ namespace NewAccountRegistration.Controllers
         {
         }
 
-        // PUT api/<UserController>/5
-        [HttpPut]
+        // PUT api/<UserController>/5        
+        [HttpPut("[action]")]
+        [ActionName("UpdateJarvisUser")]
         public async Task<ActionResult<string>> Put( [FromBody] GetJarvisInfo jarvisInfo)
         {
             if (jarvisInfo == null)
