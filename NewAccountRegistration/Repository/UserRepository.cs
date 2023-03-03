@@ -4,6 +4,7 @@ using NewAccountRegistration.Models;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
+using NewAccountRegistration.DataTransferModel;
 
 namespace NewAccountRegistration.Repository
 {
@@ -86,5 +87,41 @@ namespace NewAccountRegistration.Repository
         {
             return await _context.Users.ToListAsync<User>();
         }
+
+        public async Task<GetAddressDto> GetAddress(int Postalcode)
+        {
+            var uri = "http://localhost:7017/api/Jarvis/GetAddress/";
+
+            try 
+            { 
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(uri);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = await client.GetAsync(Postalcode.ToString());
+
+            response.EnsureSuccessStatusCode();
+
+            var jarvisUser = new GetAddressDto();
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                jarvisUser = await response.Content.ReadFromJsonAsync<GetAddressDto>();
+            }
+            else
+            {
+                jarvisUser = null;
+            }
+
+            return jarvisUser;
+        }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+}
     }
 }

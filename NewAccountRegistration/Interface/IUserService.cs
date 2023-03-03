@@ -11,5 +11,7 @@ namespace NewAccountRegistration.Interface
         Task<string> UpdateJarvisUser(GetJarvisInfo jarvisInfo);
         Task SaveUserStateAsync(GetJarvisInfo jarvisInfo);
         Task<GetJarvisInfo> GetUserStateAsync(string SingpassID);
+
+        Task<GetAddressDto> GetAddress(int Postalcode);
     }
 }

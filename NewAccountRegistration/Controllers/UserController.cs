@@ -47,8 +47,20 @@ namespace NewAccountRegistration.Controllers
             return Ok (jarvisUser);
         }
 
-        // POST api/<UserController>
-        [HttpPost]
+        [HttpGet("[action]/{Postalcode}")]
+        [ActionName("GetAddress")]
+        public async Task<ActionResult<GetAddressDto>> GetAddress(int Postalcode)
+        {
+            if (Postalcode == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _userService.GetAddress(Postalcode));            
+        }
+
+            // POST api/<UserController>
+            [HttpPost]
         public void Post([FromBody] string value)
         {
         }

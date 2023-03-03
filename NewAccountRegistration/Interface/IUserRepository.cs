@@ -1,4 +1,5 @@
-﻿using NewAccountRegistration.Models;
+﻿using NewAccountRegistration.DataTransferModel;
+using NewAccountRegistration.Models;
 
 namespace NewAccountRegistration.Interface
 {
@@ -7,5 +8,6 @@ namespace NewAccountRegistration.Interface
         Task<IEnumerable<User>> GetUsers();
         Task<GetJarvisInfo> GetJarvisInfo(string SingpassID);
         Task<string> UpdateJarvisUser(GetJarvisInfo jarvisInfo);
+        Task<GetAddressDto> GetAddress(int Postalcode);
     }
 }

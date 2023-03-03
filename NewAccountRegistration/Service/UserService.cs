@@ -33,6 +33,23 @@ namespace NewAccountRegistration.Service
             return userDetails.Select(user => new GetUserDto { FirstName = user.FirstName, LastName = user.LastName });
         }
 
+        public async Task<GetAddressDto> GetAddress(int Postalcode)
+        {
+           var info =  await _repository.UserRepository.GetAddress(Postalcode);
+            GetAddressDto address = new GetAddressDto
+            {
+                PostalCode = info.PostalCode,
+                Country =info.Country,
+                BlockNumber= info.BlockNumber,
+                BuildingName    = info.BuildingName,
+                LevelNumber = info.LevelNumber, 
+                StreetName= info.StreetName,
+                UnitNumber  = info.UnitNumber,
+            };
+
+            return address;
+        }
+
         public async Task<string> UpdateJarvisUser(GetJarvisInfo jarvisInfo)
         {
             return await _repository.UserRepository.UpdateJarvisUser(jarvisInfo);
