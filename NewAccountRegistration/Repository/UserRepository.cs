@@ -17,7 +17,7 @@ namespace NewAccountRegistration.Repository
 
         public async Task<GetJarvisInfo> GetJarvisInfo(string SingpassID)
         {
-            var uri = "https://localhost:7017/api/Jarvis/";
+            var uri = "http://localhost:7017/api/Jarvis/";
 
             try
             {
@@ -52,7 +52,7 @@ namespace NewAccountRegistration.Repository
 
         public async Task<string> UpdateJarvisUser(GetJarvisInfo jarvisInfo)
         {
-            var uri = "https://localhost:7017/api/Jarvis/";
+            var uri = "http://localhost:7017/api/Jarvis/";
 
             try
             {

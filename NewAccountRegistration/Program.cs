@@ -14,7 +14,7 @@ builder.Services.AddDbContext<Cspusermgmtdb01Context>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddDaprClient();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository>(sp => sp.GetRequiredService<IUnitOfWork>());
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

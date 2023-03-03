@@ -2,10 +2,6 @@
 using NewAccountRegistration.DataTransferModel;
 using NewAccountRegistration.Interface;
 using NewAccountRegistration.Models;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -42,6 +38,8 @@ namespace NewAccountRegistration.Controllers
                 return BadRequest();
             }
             var jarvisUser = await _userService.GetJarvisUser(SingpassID);
+            await _userService.SaveUserStateAsync(jarvisUser);
+            await _userService.GetUserStateAsync(SingpassID);
             if (jarvisUser == null)
             {
                 return NotFound();

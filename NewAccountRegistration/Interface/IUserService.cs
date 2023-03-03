@@ -9,5 +9,7 @@ namespace NewAccountRegistration.Interface
         Task<GetJarvisInfo> GetJarvisUser(String SingpassID);
 
         Task<string> UpdateJarvisUser(GetJarvisInfo jarvisInfo);
+        Task SaveUserStateAsync(GetJarvisInfo jarvisInfo);
+        Task<GetJarvisInfo> GetUserStateAsync(string SingpassID);
     }
 }

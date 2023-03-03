@@ -1,4 +1,5 @@
-﻿using NewAccountRegistration.DataTransferModel;
+﻿using Dapr.Client;
+using NewAccountRegistration.DataTransferModel;
 using NewAccountRegistration.Infrastructure;
 using NewAccountRegistration.Interface;
 using NewAccountRegistration.Models;
@@ -9,11 +10,15 @@ namespace NewAccountRegistration.Service
     {
         private readonly IRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
+        const string storeName = "statestore";
 
-        public UserService(IRepository repository, IUnitOfWork unitOfWork)
+        private readonly DaprClient _daprClient;        
+
+        public UserService(IRepository repository, IUnitOfWork unitOfWork , DaprClient daprClient)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(unitOfWork));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _daprClient = daprClient;
         }
 
         public async Task<GetJarvisInfo> GetJarvisUser(string SingpassID)
@@ -31,6 +36,18 @@ namespace NewAccountRegistration.Service
         public async Task<string> UpdateJarvisUser(GetJarvisInfo jarvisInfo)
         {
             return await _repository.UserRepository.UpdateJarvisUser(jarvisInfo);
+        }       
+
+        public async Task SaveUserStateAsync(GetJarvisInfo jarvisInfo)
+        {
+            await _daprClient.SaveStateAsync(
+                storeName, "test", jarvisInfo);
+        }
+
+        public async Task<GetJarvisInfo> GetUserStateAsync(string SingpassID)
+        {
+            return await _daprClient.GetStateAsync<GetJarvisInfo>(
+                storeName, "test");
         }
     }
 }
