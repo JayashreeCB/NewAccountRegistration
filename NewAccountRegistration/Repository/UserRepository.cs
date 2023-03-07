@@ -5,15 +5,19 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
 using NewAccountRegistration.DataTransferModel;
+using Newtonsoft.Json;
+using System.Web;
 
 namespace NewAccountRegistration.Repository
 {
     public class UserRepository :IUserRepository
     {
         private readonly Cspusermgmtdb01Context _context;
-        public UserRepository( Cspusermgmtdb01Context cspusermgmtdb01Context)
+        private readonly IConfiguration _configuration;
+        public UserRepository(IConfiguration configuration, Cspusermgmtdb01Context cspusermgmtdb01Context)
         {
             _context = cspusermgmtdb01Context;
+            _configuration = configuration;
         }
 
         public async Task<GetJarvisInfo> GetJarvisInfo(string SingpassID)
@@ -61,7 +65,7 @@ namespace NewAccountRegistration.Repository
                 
                 client.DefaultRequestHeaders.Accept.Clear();                
                 
-                var requestContent = new StringContent(JsonSerializer.Serialize(jarvisInfo), Encoding.UTF8, "application/json");
+                var requestContent = new StringContent(System.Text.Json.JsonSerializer.Serialize(jarvisInfo), Encoding.UTF8, "application/json");
 
                 var response = await client.PutAsync(uri, requestContent);               
 
@@ -86,6 +90,35 @@ namespace NewAccountRegistration.Repository
         public async Task<IEnumerable<User>> GetUsers()
         {
             return await _context.Users.ToListAsync<User>();
+        }
+
+        public async Task<MyInfo> GetMyinfo(int SingpassId)
+        {
+
+            MyInfo userinfo = null;
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(generateURI(SingpassId)))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    userinfo = JsonConvert.DeserializeObject<MyInfo>(apiResponse);
+
+                }
+
+            }
+            return userinfo ?? new MyInfo();
+        }
+
+        protected string generateURI(int singpassId)
+        {
+            string longurl = _configuration.GetValue<string>("JTCServiceEndpoints:Myinfoservice");
+        //https://localhost:7082/api/MyInfo?SingpassId=1
+            var uriBuilder = new UriBuilder(longurl);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["SingpassId"] = "1";          
+            uriBuilder.Query = query.ToString();
+            longurl = uriBuilder.ToString();
+            return longurl;
         }
 
         public async Task<GetAddressDto> GetAddress(int Postalcode)

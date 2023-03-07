@@ -10,14 +10,17 @@ namespace NewAccountRegistration.Infrastructure
         private readonly Cspusermgmtdb01Context _context;
         private bool _disposed = false;
         private IUserRepository _userRepository;
+        private readonly IConfiguration _configuration;
 
 
-        public UnitOfWork(Cspusermgmtdb01Context dbContext)
+
+        public UnitOfWork(IConfiguration configuration,  Cspusermgmtdb01Context dbContext)
         {
+            _configuration = configuration ?? throw new ArgumentException(nameof(configuration));
             _context = dbContext ?? throw new ArgumentException(nameof(dbContext));
         }
 
-        public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
+        public IUserRepository UserRepository => _userRepository ??= new UserRepository(_configuration, _context);
 
         public int Commit()
         {

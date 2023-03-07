@@ -12,13 +12,16 @@ namespace NewAccountRegistration.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
+        
         private readonly IUserService _userService;
+        private readonly IConfiguration _configuration;
 
 
-        public UserController(ILogger<UserController> logger, IUserService userService)
+        public UserController(IConfiguration configuration ,ILogger<UserController> logger, IUserService userService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));            
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
         // GET: api/<UserController>
         [HttpGet]
@@ -86,6 +89,13 @@ namespace NewAccountRegistration.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpGet("MyInfo/{Id}")]
+        public async Task<ActionResult<MyInfo>> GetMyinfo(int Id)
+        {
+            var userDetails = await _userService.GetMyinfo(Id) ;
+            return Ok(userDetails);
         }
     }
 }

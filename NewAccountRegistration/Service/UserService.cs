@@ -26,6 +26,13 @@ namespace NewAccountRegistration.Service
             return await _repository.UserRepository.GetJarvisInfo(SingpassID);            
         }
 
+
+        public async Task<MyInfo> GetMyinfo(int SingpassId)
+        {
+            return await _repository.UserRepository.GetMyinfo(SingpassId);
+            
+        }
+
         public async Task<IEnumerable<GetUserDto>> GetUserDetails()
         {
             var userDetails = await _repository.UserRepository.GetUsers();

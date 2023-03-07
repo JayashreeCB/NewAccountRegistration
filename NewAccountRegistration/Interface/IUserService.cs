@@ -13,5 +13,7 @@ namespace NewAccountRegistration.Interface
         Task<GetJarvisInfo> GetUserStateAsync(string SingpassID);
 
         Task<GetAddressDto> GetAddress(int Postalcode);
+
+        Task<MyInfo> GetMyinfo(int SingpassId);
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NewAccountRegistration.Infrastructure;
 using NewAccountRegistration.Interface;
 using NewAccountRegistration.Models;
+using NewAccountRegistration.Repository;
 using NewAccountRegistration.Service;
 
 var builder = WebApplication.CreateBuilder(args);
